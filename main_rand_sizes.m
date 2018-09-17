@@ -9,10 +9,8 @@ clear all; clc;
 tic
 
 %controls number of shapes
-Vf = 0; Vf_max = 0.2; %original Vf_max =0.05. This could refer to volume fraction (and max volume fraction)
+Vf = 0; Vf_max = 0.8; %original Vf_max =0.05. This could refer to volume fraction (and max volume fraction)
 
-%controls size
-a = 20; b = 10; c = 10; %original was (12,6,6)
 nparticles = 0;
 I = false(64,64,64);
 image_size = size(I);
@@ -21,21 +19,27 @@ id = 1;% tracks number of ellipses
 % particles to generate the specified volume fraction.  This
 % will impact the time that it takes to render the 3D volume.
 % Assign random orientation
-psi1 = 2*pi*rand; psi2 = 2*pi*rand; phi = acos(rand);
-I_ellipse = image_ellipse_3D_fast(a,b,c,psi1,psi2,phi);
-Vf_particle = sum(I_ellipse(:)) / numel(I);
-approx_nparticles = Vf_max/Vf_particle;
-disp(['Approximate # of particles: ' num2str(approx_nparticles)]);
+
+
+
 % Main loop for generating microstructure
 h = waitbar(0,'Ellipsoid placement');
 
 while Vf < Vf_max
+    
+    
+    
+    
+%controls size
+   a =randi(20);
+   b = randi(5);
+   c = randi(5); %original was (12,6,6)
     psi1 = 2*pi*rand;
     psi2 = 2*pi*rand;
     phi = acos(rand);
     I_ellipse = image_ellipse_3D_fast(a,b,c,psi1,psi2,phi);
     
-    collectIellipse(:,:,:,id) =I_ellipse;
+ 
     id = id +1;
     x0 = ceil(rand*image_size(1));
     y0 = ceil(rand*image_size(2));

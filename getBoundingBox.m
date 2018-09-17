@@ -1,0 +1,83 @@
+% By Anuva, Sept 15, 2018
+%Getting the bounding box of a particular ellipse
+
+%copied from main.m because this was already being done there for a
+%different reason
+close all
+id = 1;
+
+% size of bounding box is determined by max(a,b,c) and is 2*max(a,b,c)+ 1
+        ellipseParams = ellipse(id, :);
+        I_ell = collectIellipse(:,:,:,id);
+        x0 = ellipseParams(1);
+        y0 = ellipseParams(2);
+        z0 = ellipseParams(3);
+        
+        a =  ellipseParams(4);
+        b =  ellipseParams(5);
+        c=   ellipseParams(6);
+        
+        psi1 =  ellipseParams(7);
+        psi2 =  ellipseParams(8);
+        phi =  ellipseParams(9);
+         
+        nlo = x0 - floor(diam/2); nhi = x0 + ceil(diam/2)-1;
+        ix = mod(nlo:nhi,image_size(1));
+        ix(ix==0)=image_size(1);
+        
+        nlo = y0 - floor(diam/2); nhi = y0 + ceil(diam/2)-1;
+        iy = mod(nlo:nhi,image_size(2));
+        iy(iy==0)=image_size(2);
+        
+        nlo = z0 - floor(diam/2); nhi = z0 + ceil(diam/2)-1;
+        iz = mod(nlo:nhi,image_size(3));
+        iz(iz==0)=image_size(3);
+        Itest = logical(I(ix,iy,iz));
+        
+        
+        % ix, iy and iz are the required indices of a bounding box corresponding to ellipse
+        % "id"
+        
+        
+        
+        % Bounding box size is same for all ellipses. Rotation matrix is
+        % different
+        % given a bounding box and ellipse of "id", can we move throughthe
+        % box and tell which point belongs inside the ellipse vs outside ?
+        
+        %equation of ellipse?
+        
+        
+        
+        %can randomly set a,b,c to get smaller ellipses or densely pack
+        
+        
+        for i=1:41
+            for j=1:41
+                for k=1:41
+                    [result, distance] = checkIfEllipse(i,j,k,a,b,c,psi1,psi2,phi);
+                    
+                    out(i,j,k)  =result; 
+                    dista(i,j,k) = distance;
+                end
+            end
+        end
+        
+        
+        
+        
+    for i = 1:41
+        J = out(:,:,i);
+        image_view(J);
+title(['Slice ' num2str(i)])
+colorbar
+pause(0.5)
+    end
+    
+    figure
+     for i = 1:41
+        J = 1-I_ell(:,:,i);
+        image_view(J);
+title(['Slice ' num2str(i)])
+pause(0.5)
+    end
